@@ -22,6 +22,7 @@ func Cors() gin.HandlerFunc {
 }
 
 func main() {
+
 	r := gin.Default()
 	r.Use(Cors())
 	cmd.Userroute(r)

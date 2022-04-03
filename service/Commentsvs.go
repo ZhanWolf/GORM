@@ -5,10 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"message-board/Struct"
 	"message-board/dao"
+	"time"
 )
 
 func Setcomment(cm Struct.Comment, c *gin.Context) bool {
-	err := dao.OpenDb()
+	err := dao.OpenDb
+
 	if err != nil {
 		fmt.Println(err)
 		return false
@@ -21,28 +23,33 @@ func Setcomment(cm Struct.Comment, c *gin.Context) bool {
 		})
 		return false
 	}
-	err = dao.Insertcomment(cm)
-	if err != nil {
-		fmt.Println(err)
-		return false
-	}
+	dao.Insertcomment(cm)
 	return true
 }
 
 func Setchildcomment(pid int, from_id int, from_username string, content string, useful int) {
-	err := dao.OpenDb()
+	err := dao.OpenDb
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	flag := dao.Insertchcomment(pid, from_id, from_username, content, useful)
+	chcm := Struct.Childcomment{
+		Pid:           pid,
+		From_id:       from_id,
+		From_username: from_username,
+		Content:       content,
+		Useful:        useful,
+		CreatedAt:     time.Time{},
+		UpdatedAt:     time.Time{},
+	}
+	flag := dao.Insertchcomment(chcm)
 	if flag == false {
 		fmt.Println("插入评论出错")
 	}
 }
 
 func ListFilmcomment(movieid int) []Struct.Comment {
-	err := dao.OpenDb()
+	err := dao.OpenDb
 	if err != nil {
 		fmt.Println(err)
 		return nil
@@ -51,8 +58,8 @@ func ListFilmcomment(movieid int) []Struct.Comment {
 	return cm
 }
 
-func ListFlimcommentbytime(movieid int) []Struct.Comment {
-	err := dao.OpenDb()
+func ListFlimcommentbytime(movieid int) []Struct.CommentinWeb {
+	err := dao.OpenDb
 	if err != nil {
 		fmt.Println(err)
 		return nil
@@ -61,8 +68,8 @@ func ListFlimcommentbytime(movieid int) []Struct.Comment {
 	return cm
 }
 
-func ListFlimcommentbyuse(movieid int) []Struct.Comment {
-	err := dao.OpenDb()
+func ListFlimcommentbyuse(movieid int) []Struct.CommentinWeb {
+	err := dao.OpenDb
 	if err != nil {
 		fmt.Println(err)
 		return nil
@@ -72,7 +79,7 @@ func ListFlimcommentbyuse(movieid int) []Struct.Comment {
 }
 
 func ListFlimshortcommentbyuselimit(movieid int) []Struct.Shortcomment {
-	err := dao.OpenDb()
+	err := dao.OpenDb
 	if err != nil {
 		fmt.Println(err)
 		return nil
@@ -82,7 +89,7 @@ func ListFlimshortcommentbyuselimit(movieid int) []Struct.Shortcomment {
 }
 
 func ListFilmshortcommentbytime(movieid int) []Struct.Shortcomment {
-	err := dao.OpenDb()
+	err := dao.OpenDb
 	if err != nil {
 		fmt.Println(err)
 		return nil
@@ -92,7 +99,7 @@ func ListFilmshortcommentbytime(movieid int) []Struct.Shortcomment {
 }
 
 func ListFilmshortcommentbyuse(movieid int) []Struct.Shortcomment {
-	err := dao.OpenDb()
+	err := dao.OpenDb
 	if err != nil {
 		fmt.Println(err)
 		return nil
@@ -102,7 +109,7 @@ func ListFilmshortcommentbyuse(movieid int) []Struct.Shortcomment {
 }
 
 func ListFlimcommentwihtchild(movieid int) []Struct.Comment {
-	err := dao.OpenDb()
+	err := dao.OpenDb
 	if err != nil {
 		fmt.Println(err)
 		return nil
@@ -112,10 +119,20 @@ func ListFlimcommentwihtchild(movieid int) []Struct.Comment {
 }
 
 func Setshortcomment(fromusername string, fromuerid int, content string, lorw int, score float64, movieid int, c *gin.Context) {
-	err := dao.OpenDb()
+	err := dao.OpenDb
 	if err != nil {
 		fmt.Println(err)
 		return
+	}
+	scm := Struct.Shortcomment{
+		From_id:       fromuerid,
+		From_username: fromusername,
+		Content:       content,
+		Lorw:          lorw,
+		Score:         score,
+		Useful:        0,
+		Unuseful:      0,
+		Movieid:       movieid,
 	}
 	flag := dao.Querymovie(movieid)
 	if flag == false {
@@ -125,11 +142,11 @@ func Setshortcomment(fromusername string, fromuerid int, content string, lorw in
 		})
 		return
 	}
-	dao.Insertshortcomment(fromusername, fromuerid, content, lorw, score, movieid)
+	dao.Insertshortcomment(scm)
 }
 
 func Updateshortuse(id int, use int, c *gin.Context) {
-	err := dao.OpenDb()
+	err := dao.OpenDb
 	if err != nil {
 		fmt.Println(err)
 		return

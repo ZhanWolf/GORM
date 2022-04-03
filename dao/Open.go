@@ -1,27 +1,19 @@
 package dao
 
 import (
-	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-sql-driver/mysql"
+	"gorm.io/gorm"
 )
 
-var Db *sql.DB
+var Db *gorm.DB
 
-func OpenDb() error {
-	db, err := sql.Open("mysql", "root:123456@/login")
+func OpenDb() {
+	dsn := "root:123456@tcp(127.0.0.1:3306)/login?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)
-		return err
-	}
-
-	err = db.Ping()
-	if err != nil {
-		fmt.Println(err)
-		return err
 	}
 	Db = db
-
-	return nil
 
 }

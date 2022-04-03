@@ -7,7 +7,7 @@ import (
 )
 
 func Movieinfor(id int) *Struct.Movie {
-	err := dao.OpenDb()
+	err := dao.OpenDb
 
 	if err != nil {
 		fmt.Println(err)
@@ -18,7 +18,7 @@ func Movieinfor(id int) *Struct.Movie {
 }
 
 func Personinfor(id int) *Struct.Person {
-	err := dao.OpenDb()
+	err := dao.OpenDb
 
 	if err != nil {
 		fmt.Println(err)

@@ -1,5 +1,9 @@
 package Struct
 
+import (
+	"time"
+)
+
 type User struct {
 	Id          int
 	Username    string
@@ -40,6 +44,23 @@ type Movie struct {
 	Feature      string
 	URL          string
 	Releasing    bool
+}
+
+type MovieinWeb struct {
+	Id           int
+	Introduction string
+	Poster       string
+	Year         int
+	Date         string
+	Moviename    string
+	Score        float64
+	Language     string
+	Length       string
+	Area         string
+	Type         string
+	Feature      string
+	URL          string
+	Releasing    bool
 	Actor        []Actorinmovie
 	Director     []Actorinmovie
 	Scriptwriter []Actorinmovie
@@ -55,7 +76,20 @@ type Person struct {
 	Birthplace     string
 	Jobs           string
 	URl            string
-	Works          []Movieinactor
+	Poster         string
+}
+
+type PersoninWeb struct {
+	Id             int
+	Introduction   string
+	Birthday       string
+	Constellations string
+	Chinesename    string
+	Englishname    string
+	Birthplace     string
+	Jobs           string
+	URl            string
+	Works          []Movieinactor `gorm:"embedded"`
 	Poster         string
 }
 
@@ -71,27 +105,45 @@ type Moviepic struct {
 	URL string
 }
 
+func (Moviepic) TableName() string {
+	return "moviepic"
+}
+
 type Comment struct {
-	Id            int            `json:"评论id"`
-	From_id       int            `json:"评论者id"`
-	From_username string         `json:"评论者用户名"`
-	Content       string         `json:"评论的内容"`
-	Score         float64        `json:"评论的分数"`
-	Time          string         `json:"评论的时间"`
-	Useful        int            `json:"有用数"`
-	Unuseful      int            `json:"无用数"`
-	Movieid       int            `json:"电影的id"`
-	Child         []Childcomment `json:"子评论"`
+	Id            int
+	From_id       int
+	From_username string
+	Content       string
+	Score         float64
+	Useful        int
+	Unuseful      int
+	Movieid       int
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+}
+type CommentinWeb struct {
+	Id            int
+	From_id       int
+	From_username string
+	Content       string
+	Score         float64
+	Useful        int
+	Unuseful      int
+	Movieid       int
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	Child         []Childcomment
 }
 
 type Childcomment struct {
-	Id            int    `json:"子评论的id"`
-	Pid           int    `json:"父评论的id"`
-	From_id       int    `json:"评论者的id"`
-	From_username string `json:"评论者的用户名"`
-	Content       string `json:"评论的内容"`
-	Time          string `json:"评论的时间"`
-	Useful        int    `json:"感觉是否有用"`
+	Id            int
+	Pid           int
+	From_id       int
+	From_username string
+	Content       string
+	Useful        int
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
 }
 
 type Actorinmovie struct {
@@ -117,12 +169,13 @@ type Shortcomment struct {
 	From_id       int
 	From_username string
 	Content       string
-	Theday        string
 	Lorw          int
 	Score         float64
-	Usenum        int
-	Noues         int
-	Movie_id      int
+	Useful        int
+	Unuseful      int
+	Movieid       int
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
 }
 
 type Userimfor struct {
@@ -151,16 +204,16 @@ type Scminuser struct {
 }
 
 type Cminuser struct {
-	Id            int            `json:"评论id"`
-	From_id       int            `json:"评论者id"`
-	From_username string         `json:"评论者用户名"`
-	Content       string         `json:"评论的内容"`
-	Score         float64        `json:"评论的分数"`
-	Time          string         `json:"评论的时间"`
-	Useful        int            `json:"有用数"`
-	Unuseful      int            `json:"无用数"`
-	Movieid       int            `json:"电影的id"`
-	Child         []Childcomment `json:"子评论"`
+	Id            int
+	From_id       int
+	From_username string
+	Content       string
+	Score         float64
+	Time          string
+	Useful        int
+	Unuseful      int
+	Movieid       int
+	Child         []Childcomment `gorm:"embedded"`
 	Movieurl      string
 	Moviename     string
 }
@@ -204,4 +257,44 @@ type Tkinmovie struct {
 	Userid   int
 	Thedat   string
 	URL      string
+}
+
+type Record_direct struct {
+	Id        int
+	Movie_id  int `gorm:"column=movie_id"`
+	Person_id int `gorm:"column=person_id"`
+}
+
+func (Record_direct) TableName() string {
+	return "record_direct"
+}
+
+type Record_script struct {
+	Id        int
+	Movie_id  int `gorm:"column=movie_id"`
+	Person_id int `gorm:"column=person_id"`
+}
+
+func (Record_script) TableName() string {
+	return "record_direct"
+}
+
+type Record_all struct {
+	Id        int
+	Movie_id  int `gorm:"column=movie_id"`
+	Person_id int `gorm:"column=person_id"`
+}
+
+func (Record_all) TableName() string {
+	return "record_direct"
+}
+
+type Record_act struct {
+	Id        int
+	Movie_id  int `gorm:"column=movie_id"`
+	Person_id int `gorm:"column=person_id"`
+}
+
+func (Record_act) TableName() string {
+	return "record_direct"
 }
